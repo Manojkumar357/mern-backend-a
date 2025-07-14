@@ -3,17 +3,28 @@ const { authenticate, authorize } = require('../middlewares/auth.js');
 const {
   register,
   login,
+  profile,
+  updateUser,
+  deleteUser,
   showUsers,
-  userUpdate,
-  userDelete,
-} = require('../controllers/userController.js');
+  updateProfile,
+  getUser,
+  addUser,
+} = require("../controllers/userController");
 
 const Router = express.Router();
 
-Router.post('/register', register);
-Router.patch('/:id', authenticate, authorize('admin'), userUpdate);
-Router.delete('/:id', authenticate, authorize('admin'), userDelete);
-Router.get('/users', authenticate, authorize('admin'), showUsers);
-Router.post('/login', login);
+// user routes
+Router.post("/register", register);
+Router.post("/login", login);
+Router.get("/:id/profile", authenticate, profile);
+Router.patch("/:id/profile", authenticate, updateProfile);
+
+// admin routes
+Router.get("/", showUsers);
+Router.post("/", addUser);
+Router.get("/:id", getUser);
+Router.patch("/:id", updateUser);
+Router.delete("/:id", deleteUser);
 
 module.exports = Router;
