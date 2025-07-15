@@ -2,6 +2,8 @@ const mongoose=require('mongoose');
 const express = require('express');
 const dotenv =require( 'dotenv');
 const userRouter =require( "./routes/userRoute.js");
+const productRouter = require("./routes/productRoute.js");
+
 const cors=require('cors');
 dotenv.config();
 
@@ -32,3 +34,4 @@ const dbpass = encodeURIComponent(process.env.DBPASS);
 app.use(express.json());
 
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
