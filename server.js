@@ -3,12 +3,13 @@ const express = require('express');
 const dotenv =require( 'dotenv');
 const userRouter =require( "./routes/userRoute.js");
 const productRouter = require("./routes/productRoute.js");
-
+const orderRouter =require("./routes/orderRoute.js");
 const cors=require('cors');
 dotenv.config();
 
 const app = express();
 app.use(cors())
+app.use("/images", express.static("public/images"));
 const dbuser = encodeURIComponent(process.env.DBUSER);
 const dbpass = encodeURIComponent(process.env.DBPASS);
 
@@ -35,3 +36,4 @@ app.use(express.json());
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRouter)
