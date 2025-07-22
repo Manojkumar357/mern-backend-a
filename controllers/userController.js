@@ -58,6 +58,7 @@ const login = async (req, res) => {
       const isMatch = await bcrypt.compare(password, existingUser.password);
       if (isMatch) {
         const userObj = {
+          _id: existingUser._id, 
           firstName: existingUser.firstName,
           email: existingUser.email,
           role: existingUser.role,
@@ -105,25 +106,45 @@ const addUser = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
-
 const updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
     const { firstName, lastName, email, password } = req.body;
-    const hashedpwd = await bcrypt.hash(password, 10);
-    const userObj = {
-      firstName,
-      lastName,
-      email,
-      password: hashedpwd,
-    };
-    const result = await userModel.findByIdAndUpdate(id, userObj);
+
+    const userObj = { firstName, lastName, email };
+
+    if (password) {
+      const hashedpwd = await bcrypt.hash(password, 10);
+      userObj.password = hashedpwd;
+    }
+
+    const result = await userModel.findByIdAndUpdate(id, userObj, { new: true });
     res.status(200).json(result);
   } catch (err) {
-    console.log(err);
+    console.log("Update error:", err);
     res.status(400).json({ message: "Something went wrong" });
   }
 };
+
+
+// const updateProfile = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const { firstName, lastName, email, password } = req.body;
+//     const hashedpwd = await bcrypt.hash(password, 10);
+//     const userObj = {
+//       firstName,
+//       lastName,
+//       email,
+//       password: hashedpwd,
+//     };
+//     const result = await userModel.findByIdAndUpdate(id, userObj);
+//     res.status(200).json(result);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json({ message: "Something went wrong" });
+//   }
+// };
 
 // const showUsers = async (req, res) => {
 //   try {

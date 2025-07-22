@@ -14,6 +14,7 @@ const authenticate = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const user = jwt.verify(token, SECRET);
     req.user = user;
+    req.role = user.role;
     next();
   } catch (error) {
     return res.status(401).json({ message: "Unauthorized access", error: error.message });
